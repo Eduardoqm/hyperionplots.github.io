@@ -30,7 +30,8 @@ lai = read.csv("LAI_tang.csv", sep = ",", header = TRUE)
 
 litt  = read.csv("Liteira_tang.csv", sep = ",", header = TRUE)
 
-#fuel = read.csv("Combustivel_Brown_Tang.csv", sep = ",", header = TRUE)
+fuel = read.csv("Fuel_tang.csv", sep = ",", header = TRUE)
+
 #fire = read.csv("Fire.csv", sep = ",", header = TRUE) #Make the fire intensity!
 
 
@@ -64,12 +65,16 @@ litt = litt %>%
   unite(col = "id", c("parcela", "data", "dist"), sep = '_')
 colnames(litt) = c("id", "litter")
 
+fuel = fuel %>% 
+  unite(col = "id", c("parcela", "data", "dist"), sep = '_')
+colnames(fuel) = c("id", "fuel")
 
 
 df = hy
 df = full_join(df, biomass, by="id")
 df = full_join(df, lai, by="id")
 df = full_join(df, litt, by="id")
+df = full_join(df, fuel, by="id")
 
 df = df %>% 
   separate(col = "id", c("parcela", "data", "dist"), sep = '_')
@@ -199,17 +204,7 @@ d = ggplot(gg4, aes(date,value, col=index))+
   theme_minimal()+
   theme(axis.text.x = element_text(angle = 90))
 
-
-#Join plots ===================================================================
-#j = ggarrange(a, c, ncol = 2, nrow = 1)
-
-#b = ggarrange(b, d, ncol = 2, nrow = 1)
-
-#ggarrange(a, b, ncol = 1, nrow = 2)
-
-#c = ggarrange(a, b, c, d + font("x.text", size = 10),
-          #ncol = 2, nrow = 2)
-
+#Interative plot =========================================================================
 a = ggplotly(a)
 b = ggplotly(b)
 c = ggplotly(c)
@@ -217,8 +212,35 @@ d = ggplotly(d)
 
 
 ```
-## Here are the graphs of the relative difference between the control and the burned plots, separated for the edge and core of the forest. 
+### Here are the graphs of the relative difference between the control and the burned plots, separated for the edge and core of the forest. 
 
+## B1yr - Edge
 ```{r pressure, echo=FALSE}
-a;b;c;d
+#B1yr - Edge
+a
 ```
+
+## B1yr - Core
+```{r, echo=FALSE}
+#B1yr - Core
+c
+```
+
+## B3yr - Edge
+```{r, echo=FALSE}
+#B3yr - Edge
+b
+```
+
+## B3yr - Core
+```{r, echo=FALSE}
+#B3yr - Core
+d
+```
+
+## Data Bank
+```{r, echo=FALSE}
+df2 = df[,c(1,2,3,19,20,21,22)]
+head(df2, 100)
+```
+
